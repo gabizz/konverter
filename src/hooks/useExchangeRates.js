@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
-const CACHE_KEY = 'konverter_rates';
-const TIME_KEY = 'konverter_time';
+const CACHE_KEY = 'konverter_rates_v2';
+const TIME_KEY = 'konverter_time_v2';
 // 24 hours in milliseconds
 const CACHE_DURATION = 24 * 60 * 60 * 1000;
 // We fetch EUR base, and get USD, RON, THB. 
@@ -37,18 +37,16 @@ export default function useExchangeRates() {
         
         const data = await response.json();
         
-        // Ensure EUR is in the rates object, and pick the ones we need
-        const neededRates = {
+        // Ensure EUR is in the rates object, and store all available rates
+        const allRates = {
+          ...data.rates,
           EUR: 1,
-          USD: data.rates.USD,
-          RON: data.rates.RON,
-          THB: data.rates.THB,
         };
 
-        localStorage.setItem(CACHE_KEY, JSON.stringify(neededRates));
+        localStorage.setItem(CACHE_KEY, JSON.stringify(allRates));
         localStorage.setItem(TIME_KEY, now.toString());
 
-        setRates(neededRates);
+        setRates(allRates);
         setLoading(false);
       } catch (err) {
         console.error('Error fetching rates, falling back to cache if available', err);
