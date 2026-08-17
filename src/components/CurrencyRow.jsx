@@ -20,19 +20,7 @@ const getFlagEmoji = (currencyCode) => {
   }
 };
 
-const getCurrencySymbol = (currencyCode) => {
-  try {
-    const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: currencyCode });
-    const symbolPart = formatter.formatToParts(0).find(p => p.type === 'currency');
-    const overrides = { RON: 'lei' }; // en-US sometimes fails to localize RON correctly
-    return overrides[currencyCode] || (symbolPart ? symbolPart.value : currencyCode);
-  } catch (e) {
-    return currencyCode;
-  }
-};
-
 export default function CurrencyRow({ currency, amount, selected, onClick, onClear }) {
-  const symbol = getCurrencySymbol(currency);
   const flag = getFlagEmoji(currency);
 
   const displayAmount = amount.toString() || '0';
@@ -70,9 +58,6 @@ export default function CurrencyRow({ currency, amount, selected, onClick, onCle
       </Box>
 
       <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 1 }}>
-        <Typography variant="h6" color="text.secondary">
-          {symbol}
-        </Typography>
         <Typography 
           variant="h5" 
           fontWeight="600" 
@@ -89,12 +74,12 @@ export default function CurrencyRow({ currency, amount, selected, onClick, onCle
 
         {displayAmount !== '0' && displayAmount !== '' && (
           <IconButton 
-            size="small" 
+            size="medium" 
             onClick={(e) => {
               e.stopPropagation();
               if (onClear) onClear(currency);
             }}
-            sx={{ ml: 0.5, color: 'text.secondary', p: 0.5 }}
+            sx={{ ml: 2, color: 'text.secondary', p: 1 }}
           >
             <CloseIcon fontSize="small" />
           </IconButton>
