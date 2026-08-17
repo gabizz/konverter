@@ -34,10 +34,13 @@ export default defineConfig({
     chunkSizeWarningLimit: 800, // Increase warning limit slightly
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom'],
-          mui: ['@mui/material', '@mui/icons-material', '@emotion/react', '@emotion/styled'],
-          dnd: ['@hello-pangea/dnd']
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('@mui')) return 'mui';
+            if (id.includes('@hello-pangea/dnd')) return 'dnd';
+            if (id.includes('react')) return 'vendor';
+            return 'vendor'; // Fallback for other modules
+          }
         }
       }
     }
