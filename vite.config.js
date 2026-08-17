@@ -30,4 +30,16 @@ export default defineConfig({
       }
     })
   ],
+  build: {
+    chunkSizeWarningLimit: 800, // Increase warning limit slightly
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          mui: ['@mui/material', '@mui/icons-material', '@emotion/react', '@emotion/styled'],
+          dnd: ['@hello-pangea/dnd']
+        }
+      }
+    }
+  }
 })
